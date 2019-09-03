@@ -9,25 +9,54 @@ import {
 } from "./interfaces"
 
 
+/**
+ * provides basic functionality
+ * has abstract properties for each type of builder
+ * @type {Object}
+ */
 export abstract class AbstractQueryBuilder implements QueryBuilderInterface
 {
+    /**
+     * filter builder
+     * @type {FilterBuilderInterface}
+     */
     abstract filterBuilder: FilterBuilderInterface;
 
+    /**
+     * sort builder
+     * @type {SortBuilderInterface}
+     */
     abstract sortBuilder: SortBuilderInterface;
 
+    /**
+     * pagination builder
+     * @type {PaginationBuilderInterface}
+     */
     abstract paginationBuilder: PaginationBuilderInterface;
 
+    /**
+     * build query
+     * if some builder is not provided, it is skipped
+     * @param  {QueryFilter} query filter settings to be built
+     * @return {string[]}          URL-like key value pairs
+     */
     build(query: QueryFilter): string[]
     {
         return [].concat(
-            this.buildItem(this.filterBuilder, query.filters),
-            this.buildItem(this.sortBuilder, query.sorts),
-            this.buildItem(this.paginationBuilder, query.pagination)
+            this.buildItems(this.filterBuilder, query.filters),
+            this.buildItems(this.sortBuilder, query.sorts),
+            this.buildItems(this.paginationBuilder, query.pagination)
         )
         return null;
     }
 
-    private buildItem<ItemType>(builder: CommonBuilderInterface<ItemType>, item: ItemType): string[]
+    /**
+     * build items of one kind
+     * @param   {CommonBuilderInterface<ItemType>} builder instance of the builder
+     * @param   {Item}                             item    item to be built
+     * @returns {string[]}                                 built URL like key-value pairs
+     */
+    private buildItems<ItemType>(builder: CommonBuilderInterface<ItemType>, item: ItemType): string[]
     {
         let result: string[] = [];
 
@@ -39,8 +68,18 @@ export abstract class AbstractQueryBuilder implements QueryBuilderInterface
 }
 
 
+/**
+ * query builder for most cases of use
+ * @type {Object}
+ */
 export class QueryBuilder extends AbstractQueryBuilder
 {
+    /**
+     * initialize instance
+     * @param {FilterBuilderInterface}     public filterBuilder     filter builder instance
+     * @param {SortBuilderInterface}       public sortBuilder       sort builder instance
+     * @param {PaginationBuilderInterface} public paginationBuilder pagination builder instance
+     */
     constructor(
         public filterBuilder: FilterBuilderInterface,
         public sortBuilder: SortBuilderInterface,
