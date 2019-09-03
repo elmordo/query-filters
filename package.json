@@ -1,0 +1,29 @@
+{
+  "name": "query-filter",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elmordo/query-filter.git"
+  },
+  "keywords": [
+    "query",
+    "filter",
+    "rest",
+    "pagination",
+    "sort"
+  ],
+  "author": "Petr Jindra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elmordo/query-filter/issues"
+  },
+  "homepage": "https://github.com/elmordo/query-filter#readme",
+  "devDependencies": {
+    "typescript": "^3.6.2"
+  }
+}
