@@ -10,7 +10,7 @@ describe("Left hand style filter", function ()
 {
     describe("Constructor tests", function ()
     {
-        it("default open and close character of filter is [ and ]", () =>
+        it("Default open and close character of filter is [ and ]", () =>
         {
             let builder = new LeftHandedStyleFilter();
             assert(builder.openChar == LeftHandedStyleFilter.DEFAULT_OPEN);
@@ -28,7 +28,7 @@ describe("Left hand style filter", function ()
         });
     });
 
-    describe("test build calls", function ()
+    describe("Build calls", function ()
     {
         const FIELD = "my_field";
         const OPERATOR = "eq";
@@ -57,27 +57,27 @@ describe("Left hand style filter", function ()
 
         }
 
-        it("test fully specified filter", function ()
+        it("Test fully specified filter", function ()
         {
             doTest(FIELD, OPERATOR, STR_VALUE);
         });
 
-        it("test filter with boolearn value", function ()
+        it("Test filter with boolearn value", function ()
         {
             doTest(FIELD, OPERATOR, BOOL_VALUE);
         });
 
-        it("test filter with empty string", function ()
+        it("Test filter with empty string", function ()
         {
             doTest(FIELD, OPERATOR, "");
         });
 
-        it("test NULL value. The 'null' value should trigger error", function ()
+        it("Test NULL value. The 'null' value should trigger error", function ()
         {
             expect(() => doTest(FIELD, OPERATOR, null)).throws();
         });
 
-        it("test UNDEFINED value. The `undefined` value should trigger error", function ()
+        it("Test UNDEFINED value. The `undefined` value should trigger error", function ()
         {
             expect(() => doTest(FIELD, OPERATOR, undefined)).throws();
         });
