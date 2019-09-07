@@ -4,7 +4,7 @@
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "tsc test/*.ts && mocha"
+    "test": "./node_modules/typescript/bin/tsc test/*.ts && mocha"
   },
   "repository": {
     "type": "git",
