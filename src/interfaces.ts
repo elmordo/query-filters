@@ -20,9 +20,9 @@ export interface Filter
 
     /**
      * value to match against
-     * @type {any}
+     * @type {string|number|boolean|Date}
      */
-    value?: string|number|boolean|Date;
+    value: string|number|boolean|Date;
 }
 
 
@@ -91,8 +91,26 @@ export interface QueryFilter
 }
 
 
+/**
+ * common interface for all builders
+ */
 export interface CommonBuilderInterface<InputType>
 {
+    /**
+     * build URL style key-value pairs from list of items
+     * the values of the key-value pairs cannot be NULL or UNDEFINED. There is no way to encode
+     * those values without not to be ambigous with empty string or string with content
+     * NULL or UNDEFINED.
+     *
+     * Example 1: `foo=undefined` - Is original value `{foo: undefined}` or `{foo: 'undefined'}`?
+     * Example 2: `foo=` - Is original value `{foo: undefined}`, `{foo: null}` or {foo: ''}?
+     *
+     * Cases in examples have to be done by some custom features (e.g. special filter for NULL
+     * and/or UNDEFINED values).
+     *
+     * @param  {InputType} items set of items to be built
+     * @return {string[]}        built items
+     */
     build(items: InputType): string[];
 }
 

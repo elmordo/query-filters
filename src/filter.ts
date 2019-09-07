@@ -27,7 +27,15 @@ export abstract class AbstractFilterBuilder implements FilterBuilderInterface
      */
     build(filters: Filter[]): string[]
     {
-        return filters.map(f => this.buildFilter(f)).reduce((acc, val) => acc.concat(val), []);
+        return filters.map(f => this.processFilter(f)).reduce((acc, val) => acc.concat(val), []);
+    }
+
+    protected processFilter(filter: Filter): string[]
+    {
+        if (filter.value === null || filter.value === undefined)
+            throw new Error("Value cannot be null or undefined");
+
+        return this.buildFilter(filter);
     }
 
     /**
