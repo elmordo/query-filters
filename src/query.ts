@@ -51,6 +51,16 @@ export abstract class AbstractQueryBuilder implements QueryBuilderInterface
     }
 
     /**
+     * build all parts of query and join them into one string like `k1=v1&k2=v2&...`
+     * @param  {QueryFilter} query query to be built
+     * @return {string[]}          query string
+     */
+    buildString(query: QueryFilter): string
+    {
+        return this.build(query).join("&");
+    }
+
+    /**
      * build items of one kind
      * @param   {CommonBuilderInterface<ItemType>} builder instance of the builder
      * @param   {Item}                             item    item to be built
