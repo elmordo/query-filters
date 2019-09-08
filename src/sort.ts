@@ -57,6 +57,19 @@ export abstract class AbstractSortBuilder implements SortBuilderInterface
     }
 
     /**
+     * process one sort item
+     * @param  {Sort}     sort sort item
+     * @return {string[]}      built sort
+     */
+    protected processSort(sort: Sort): string[]
+    {
+        if (!sort.direction)
+            sort.direction = "asc";
+
+        return this.buildSort(sort);
+    }
+
+    /**
      * build one sort item
      * @param  {Sort}     sort sort item
      * @return {string[]}      URL style key-value pairs
@@ -159,7 +172,7 @@ export class SortBySign extends AbstractKeyBasedSortBuilder
  * sort formatted like __sort=field.asc
  * @type {Object}
  */
-export class SortProperty extends AbstractKeyBasedSortBuilder
+export class SortByProperty extends AbstractKeyBasedSortBuilder
 {
     /**
      * build value for key-value pair
