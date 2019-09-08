@@ -1,6 +1,6 @@
 {
-  "name": "query-filters",
-  "version": "1.0.0",
+  "name": "@elmordo/query-filters",
+  "version": "1.0.1",
   "description": "",
   "main": "lib/index.js",
   "scripts": {

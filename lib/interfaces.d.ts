@@ -1,7 +1,7 @@
 export interface Filter {
     field: string;
     operator: string;
-    value?: string | number | boolean | Date;
+    value: string | number | boolean | Date;
 }
 export interface Sort {
     field: string;
@@ -30,4 +30,5 @@ export interface PaginationBuilderInterface extends CommonBuilderInterface<Pagin
 }
 export interface QueryBuilderInterface {
     build(query: QueryFilter): string[];
+    buildString(query: QueryFilter): string;
 }

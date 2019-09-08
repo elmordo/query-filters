@@ -4,6 +4,7 @@ export declare abstract class AbstractQueryBuilder implements QueryBuilderInterf
     abstract sortBuilder: SortBuilderInterface;
     abstract paginationBuilder: PaginationBuilderInterface;
     build(query: QueryFilter): string[];
+    buildString(query: QueryFilter): string;
     private buildItems;
 }
 export declare class QueryBuilder extends AbstractQueryBuilder {

@@ -3,6 +3,7 @@ export declare type DateEncoder = (date: Date) => string;
 export declare abstract class AbstractFilterBuilder implements FilterBuilderInterface {
     dateEncoder: DateEncoder;
     build(filters: Filter[]): string[];
+    protected processFilter(filter: Filter): string[];
     protected abstract buildFilter(filter: Filter): string[];
 }
 export declare class LeftHandedStyleFilter extends AbstractFilterBuilder {

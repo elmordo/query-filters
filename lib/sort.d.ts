@@ -6,6 +6,7 @@ export declare abstract class AbstractSortBuilder implements SortBuilderInterfac
     readonly descKey: string;
     constructor(ascKey?: string, descKey?: string);
     build(sorts: Sort[]): string[];
+    protected processSort(sort: Sort): string[];
     protected abstract buildSort(sort: Sort): string[];
 }
 export declare abstract class AbstractKeyBasedSortBuilder extends AbstractSortBuilder {
@@ -21,6 +22,6 @@ export declare class SortByFunction extends AbstractKeyBasedSortBuilder {
 export declare class SortBySign extends AbstractKeyBasedSortBuilder {
     protected buildValue(sort: Sort): string;
 }
-export declare class SortProperty extends AbstractKeyBasedSortBuilder {
+export declare class SortByProperty extends AbstractKeyBasedSortBuilder {
     protected buildValue(sort: Sort): string;
 }
