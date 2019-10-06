@@ -160,15 +160,8 @@ export interface PaginationBuilderInterface extends CommonBuilderInterface<Pagin
  * build all query filter
  * @type {Object}
  */
-export interface QueryBuilderInterface
+export interface QueryBuilderInterface extends CommonBuilderInterface<QueryFilter>
 {
-    /**
-     * build all parts of query
-     * @param  {QueryFilter} query query filter to be built
-     * @return {string[]}          key-value paris for URL
-     */
-    build(query: QueryFilter): string[];
-
     /**
      * build all parts of query and join them into one string like `k1=v1&k2=v2&...`
      * @param  {QueryFilter} query query to be built

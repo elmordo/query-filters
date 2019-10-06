@@ -1,11 +1,13 @@
 
+import { CommonBuilderBase } from "./base";
 import {
     QueryFilter,
     QueryBuilderInterface,
     FilterBuilderInterface,
     SortBuilderInterface,
     PaginationBuilderInterface,
-    CommonBuilderInterface
+    CommonBuilderInterface,
+    KeyMultiValueList
 } from "./interfaces"
 
 
@@ -14,7 +16,7 @@ import {
  * has abstract properties for each type of builder
  * @type {Object}
  */
-export abstract class AbstractQueryBuilder implements QueryBuilderInterface
+export abstract class AbstractQueryBuilder extends CommonBuilderBase<QueryFilter> implements QueryBuilderInterface
 {
     /**
      * filter builder
@@ -47,7 +49,19 @@ export abstract class AbstractQueryBuilder implements QueryBuilderInterface
             this.buildItems(this.sortBuilder, query.sorts),
             this.buildItems(this.paginationBuilder, query.pagination)
         )
-        return null;
+    }
+
+    /**
+     * build key-multivalue list of items
+     * @param  {QueryFilter}       query query definition
+     * @return {KeyMultiValueList}       built items
+     */
+    buildKeyList(query: QueryFilter): KeyMultiValueList
+    {
+        const result = {};
+        const filterKeys = this.buildItems(this.filterBuilder, query.filters);
+        const sortKeys = this.buildItems(this.sortBuilder, query.sorts);
+        const paginationKeys = this.buildItems(this.paginationBuilder, query.pagination);
     }
 
     /**
