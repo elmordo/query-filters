@@ -1,8 +1,9 @@
 
-import { Pagination, PaginationBuilderInterface } from "./interfaces"
+import { Pagination, PaginationBuilderInterface, KeyMultiValueList } from "./interfaces"
+import { CommonBuilderBase } from "./base";
 
 
-export class PaginationByTwoKeys implements PaginationBuilderInterface
+export class PaginationByTwoKeys extends CommonBuilderBase<Pagination> implements PaginationBuilderInterface
 {
     static readonly DEFAULT_PER_PAGE_KEY = "__perPage";
 
@@ -14,6 +15,8 @@ export class PaginationByTwoKeys implements PaginationBuilderInterface
 
     constructor(perPageKey?: string, pageKey?: string)
     {
+        super();
+
         if (!perPageKey) perPageKey = PaginationByTwoKeys.DEFAULT_PER_PAGE_KEY;
         if (!pageKey) pageKey = PaginationByTwoKeys.DEFAULT_PAGE_KEY;
 
@@ -21,24 +24,16 @@ export class PaginationByTwoKeys implements PaginationBuilderInterface
         this.pageKey = pageKey;
     }
 
-    build(pagination: Pagination): string[]
-    {
-        return [
-            this.buildKey(this.perPageKey, pagination.perPage),
-            this.buildKey(this.pageKey, pagination.page)
-        ];
-    }
-
     /**
-     * build one key
-     * @param  {string} key   key
-     * @param  {number} value value
-     * @return {string}       URL style key-value pair
+     * build key-multivalue list of items
+     * @param  {QueryFilter}       query query definition
+     * @return {KeyMultiValueList}       built items
      */
-    private buildKey(key: string, value: number): string
+    buildKeyList(pagination: Pagination): KeyMultiValueList
     {
-        let k = encodeURIComponent(key);
-        let v = encodeURIComponent(value);
-        return k + "=" + v;
+        const result: KeyMultiValueList = {};
+        result[this.perPageKey] = [pagination.perPage.toString()];
+        result[this.pageKey] = [pagination.page.toString()];
+        return result;
     }
 }

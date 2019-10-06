@@ -16,17 +16,18 @@ export interface QueryFilter {
     sorts?: Sort[];
     pagination?: Pagination;
 }
+export declare type KeyMultiValueList = {
+    [key: string]: string[];
+};
 export interface CommonBuilderInterface<InputType> {
     build(items: InputType): string[];
+    buildKeyList(items: InputType): KeyMultiValueList;
 }
 export interface FilterBuilderInterface extends CommonBuilderInterface<Filter[]> {
-    build(filters: Filter[]): string[];
 }
 export interface SortBuilderInterface extends CommonBuilderInterface<Sort[]> {
-    build(sorts: Sort[]): string[];
 }
 export interface PaginationBuilderInterface extends CommonBuilderInterface<Pagination> {
-    build(pagination: Pagination): string[];
 }
 export interface QueryBuilderInterface {
     build(query: QueryFilter): string[];
