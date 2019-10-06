@@ -92,6 +92,13 @@ export interface QueryFilter
 
 
 /**
+ * one key store list of values
+ * @type {Object}
+ */
+export type KeyMultiValueList = {[key: string]: string[]};
+
+
+/**
  * common interface for all builders
  */
 export interface CommonBuilderInterface<InputType>
@@ -112,6 +119,13 @@ export interface CommonBuilderInterface<InputType>
      * @return {string[]}        built items
      */
     build(items: InputType): string[];
+
+    /**
+     * build key-multivalue list of items
+     * @param  {QueryFilter}       query query definition
+     * @return {KeyMultiValueList}       built items
+     */
+    buildKeyList(items: InputType): KeyMultiValueList;
 }
 
 
@@ -121,12 +135,6 @@ export interface CommonBuilderInterface<InputType>
  */
 export interface FilterBuilderInterface extends CommonBuilderInterface<Filter[]>
 {
-    /**
-     * build filters
-     * @param  {Filter[]} filters filters to be built
-     * @return {string[]}         key-value paris for URL
-     */
-    build(filters: Filter[]): string[];
 }
 
 
@@ -136,12 +144,6 @@ export interface FilterBuilderInterface extends CommonBuilderInterface<Filter[]>
  */
 export interface SortBuilderInterface extends CommonBuilderInterface<Sort[]>
 {
-    /**
-     * build sort settings
-     * @param  {Sort[]}   sorts sort settings
-     * @return {string[]}       key-value paris for URL
-     */
-    build(sorts: Sort[]): string[];
 }
 
 
@@ -151,12 +153,6 @@ export interface SortBuilderInterface extends CommonBuilderInterface<Sort[]>
  */
 export interface PaginationBuilderInterface extends CommonBuilderInterface<Pagination>
 {
-    /**
-     * build pagination
-     * @param  {Pagination} pagination pagination settings to be built
-     * @return {string[]}              key-value paris for URL
-     */
-    build(pagination: Pagination): string[];
 }
 
 
