@@ -1,12 +1,13 @@
 
-import { SortBuilderInterface, Sort } from "./interfaces"
+import { CommonBuilderBase } from "./base";
+import { SortBuilderInterface, Sort, KeyMultiValueList } from "./interfaces"
 
 
 /**
  * common base for most of sort builders
  * @type {Object}
  */
-export abstract class AbstractSortBuilder implements SortBuilderInterface
+export abstract class AbstractSortBuilder extends CommonBuilderBase<Sort[]> implements SortBuilderInterface
 {
     /**
      * default key for ASC sorting
@@ -39,6 +40,7 @@ export abstract class AbstractSortBuilder implements SortBuilderInterface
      */
     constructor(ascKey?: string, descKey?: string)
     {
+        super();
         if (!ascKey) ascKey = AbstractSortBuilder.DEFAULT_ASC;
         if (!descKey) descKey = AbstractSortBuilder.DEFAULT_DESC;
 
@@ -47,34 +49,41 @@ export abstract class AbstractSortBuilder implements SortBuilderInterface
     }
 
     /**
-     * build sort settings
-     * @param  {Sort[]}   sorts sort settings
-     * @return {string[]}       key-value paris for URL
+     * build key-multivalue list of items
+     * @param  {QueryFilter}       query query definition
+     * @return {KeyMultiValueList}       built items
      */
-    build(sorts: Sort[]): string[]
+    buildKeyList(items: Sort[]): KeyMultiValueList
     {
-        return sorts.map(s => this.buildSort(s)).reduce((acc, s) => acc.concat(s), []);
+        const result: KeyMultiValueList = {};
+
+        items.forEach(item =>
+        {
+            this.processSort(item, result);
+        });
+
+        return result;
     }
 
     /**
      * process one sort item
      * @param  {Sort}     sort sort item
-     * @return {string[]}      built sort
+     * @param  {KeyMultiValueList} result data
      */
-    protected processSort(sort: Sort): string[]
+    protected processSort(sort: Sort, result: KeyMultiValueList): void
     {
         if (!sort.direction)
             sort.direction = "asc";
 
-        return this.buildSort(sort);
+        this.buildSort(sort, result);
     }
 
     /**
      * build one sort item
      * @param  {Sort}     sort sort item
-     * @return {string[]}      URL style key-value pairs
+     * @param  {KeyMultiValueList} result data
      */
-    protected abstract buildSort(sort: Sort): string[];
+    protected abstract buildSort(sort: Sort, result: KeyMultiValueList): void;
 }
 
 
@@ -112,13 +121,11 @@ export abstract class AbstractKeyBasedSortBuilder extends AbstractSortBuilder
     /**
      * build one sort item
      * @param  {Sort}     sort sort item
-     * @return {string[]}      URL key-value pairs
+     * @param  {KeyMultiValueList} result data
      */
-    protected buildSort(sort: Sort): string[]
+    protected buildSort(sort: Sort, result: KeyMultiValueList): void
     {
-        let key = encodeURIComponent(this.sortKey);
-        let val = this.buildValue(sort);
-        return [key + "=" + encodeURIComponent(val)];
+        this.addPairToResult(sort.field, this.buildValue(sort), result);
     }
 
     /**
