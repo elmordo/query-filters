@@ -3,4 +3,5 @@ export declare abstract class CommonBuilderBase<InputType> implements CommonBuil
     build(items: InputType): string[];
     abstract buildKeyList(items: InputType): KeyMultiValueList;
     protected buildPair(key: string, value: string): string;
+    protected addPairToResult(key: string, value: string, result: KeyMultiValueList): void;
 }
