@@ -1,5 +1,6 @@
 
-import { Filter, FilterBuilderInterface } from "./interfaces"
+import { CommonBuilderBase } from "./base";
+import { Filter, FilterBuilderInterface, KeyMultiValueList } from "./interfaces";
 
 
 /**
@@ -13,7 +14,7 @@ export type DateEncoder = (date: Date) => string;
  * process filters by applying buildFilter abstract method to each filter
  * @type {Object}
  */
-export abstract class AbstractFilterBuilder implements FilterBuilderInterface
+export abstract class AbstractFilterBuilder extends CommonBuilderBase<Filter[]> implements FilterBuilderInterface
 {
     /**
      * encode date to string
@@ -21,29 +22,31 @@ export abstract class AbstractFilterBuilder implements FilterBuilderInterface
     dateEncoder: DateEncoder = (d: Date) => d.toISOString();
 
     /**
-     * build filters to URL key-value pairs
-     * @param  {Filter[]} filters list of filters
-     * @return {string[]}         build items
+     * build key-multivalue list of items
+     * @param  {QueryFilter}       query query definition
+     * @return {KeyMultiValueList}       built items
      */
-    build(filters: Filter[]): string[]
+    buildKeyList(items: Filter[]): KeyMultiValueList
     {
-        return filters.map(f => this.processFilter(f)).reduce((acc, val) => acc.concat(val), []);
+        const result: KeyMultiValueList = {};
+        items.forEach(x => this.processFilter(x, result));
+        return result;
     }
 
-    protected processFilter(filter: Filter): string[]
+    protected processFilter(filter: Filter, result: KeyMultiValueList): void
     {
         if (filter.value === null || filter.value === undefined)
             throw new Error("Value cannot be null or undefined");
 
-        return this.buildFilter(filter);
+        this.buildFilter(filter, result);
     }
 
     /**
      * build one filter
      * @param  {Filter}   filter filter to be built
-     * @return {string[]}        build items
+     * @param  {KeyMultiValueList} result result object
      */
-    protected abstract buildFilter(filter: Filter): string[];
+    protected abstract buildFilter(filter: Filter, result: KeyMultiValueList): void;
 }
 
 
@@ -98,9 +101,9 @@ export class LeftHandedStyleFilter extends AbstractFilterBuilder
     /**
      * build one filter
      * @param  {Filter}   filter filter to be built
-     * @return {string[]}        build items
+     * @param  {KeyMultiValueList} result result object
      */
-    protected buildFilter(filter: Filter): string[]
+    protected buildFilter(filter: Filter, result: KeyMultiValueList): void
     {
         let key = filter.field + this.openChar + filter.operator + this.closeChar;
         let value = filter.value;
@@ -108,7 +111,7 @@ export class LeftHandedStyleFilter extends AbstractFilterBuilder
         if (value instanceof Date)
             value = this.dateEncoder(value);
 
-        return [encodeURIComponent(key) + "=" + encodeURIComponent(value)];
+        this.addPairToResult(key, value.toString(), result);
     }
 }
 
@@ -147,9 +150,9 @@ export class RightHandStyleFilter extends AbstractFilterBuilder
     /**
      * build one filter instance
      * @param  {Filter}   filter filter instance
-     * @return {string[]}        built URL style key-value pairs
+     * @param  {KeyMultiValueList} result result object
      */
-    protected buildFilter(filter: Filter): string[]
+    protected buildFilter(filter: Filter, result: KeyMultiValueList): void
     {
         let value = filter.value;
 
@@ -160,6 +163,7 @@ export class RightHandStyleFilter extends AbstractFilterBuilder
             encodeURIComponent(filter.operator) +
             encodeURIComponent(this.separator) +
             encodeURIComponent(value);
-        return [encodeURIComponent(filter.field) + "=" + right]
+
+        this.addPairToResult(filter.field, value.toString(), result);
     }
 }
