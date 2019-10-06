@@ -159,11 +159,8 @@ export class RightHandStyleFilter extends AbstractFilterBuilder
         if (value instanceof Date)
             value = this.dateEncoder(value);
 
-        let right =
-            encodeURIComponent(filter.operator) +
-            encodeURIComponent(this.separator) +
-            encodeURIComponent(value);
+        let right = filter.operator + this.separator + value.toString();
 
-        this.addPairToResult(filter.field, value.toString(), result);
+        this.addPairToResult(filter.field, right, result);
     }
 }

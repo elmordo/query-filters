@@ -125,7 +125,7 @@ export abstract class AbstractKeyBasedSortBuilder extends AbstractSortBuilder
      */
     protected buildSort(sort: Sort, result: KeyMultiValueList): void
     {
-        this.addPairToResult(sort.field, this.buildValue(sort), result);
+        this.addPairToResult(this.sortKey, this.buildValue(sort), result);
     }
 
     /**
