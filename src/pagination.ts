@@ -32,8 +32,8 @@ export class PaginationByTwoKeys extends CommonBuilderBase<Pagination> implement
     buildKeyList(pagination: Pagination): KeyMultiValueList
     {
         const result: KeyMultiValueList = {};
-        result[this.perPageKey] = [pagination.perPage.toString()];
-        result[this.pageKey] = [pagination.page.toString()];
+        this.addPairToResult(this.perPageKey, pagination.perPage.toString(), result);
+        this.addPairToResult(this.pageKey, pagination.page.toString(), result);
         return result;
     }
 }

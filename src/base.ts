@@ -49,4 +49,16 @@ export abstract class CommonBuilderBase<InputType> implements CommonBuilderInter
     {
         return [encodeURIComponent(key), encodeURIComponent(value)].join("=");
     }
+
+    /**
+     * add key and value into result
+     * @param {string}            key    key
+     * @param {string}            value  value
+     * @param {KeyMultiValueList} result result object
+     */
+    protected addPairToResult(key: string, value: string, result: KeyMultiValueList): void
+    {
+        if (result[key] === undefined) result[key] = [];
+        result[key].push(value);
+    }
 }
