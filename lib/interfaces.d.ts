@@ -29,7 +29,6 @@ export interface SortBuilderInterface extends CommonBuilderInterface<Sort[]> {
 }
 export interface PaginationBuilderInterface extends CommonBuilderInterface<Pagination> {
 }
-export interface QueryBuilderInterface {
-    build(query: QueryFilter): string[];
+export interface QueryBuilderInterface extends CommonBuilderInterface<QueryFilter> {
     buildString(query: QueryFilter): string;
 }

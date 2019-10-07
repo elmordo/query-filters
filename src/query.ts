@@ -62,6 +62,12 @@ export abstract class AbstractQueryBuilder extends CommonBuilderBase<QueryFilter
         const filterKeys = this.buildItems(this.filterBuilder, query.filters);
         const sortKeys = this.buildItems(this.sortBuilder, query.sorts);
         const paginationKeys = this.buildItems(this.paginationBuilder, query.pagination);
+
+        this.addItemsToResult(filterKeys, result);
+        this.addItemsToResult(sortKeys, result);
+        this.addItemsToResult(paginationKeys, result);
+
+        return result;
     }
 
     /**
@@ -80,14 +86,22 @@ export abstract class AbstractQueryBuilder extends CommonBuilderBase<QueryFilter
      * @param   {Item}                             item    item to be built
      * @returns {string[]}                                 built URL like key-value pairs
      */
-    private buildItems<ItemType>(builder: CommonBuilderInterface<ItemType>, item: ItemType): string[]
+    private buildItems<ItemType>(builder: CommonBuilderInterface<ItemType>, item: ItemType): KeyMultiValueList
     {
-        let result: string[] = [];
+        let result: KeyMultiValueList = {};
 
         if (builder && item)
-            result = builder.build(item);
+            result = builder.buildKeyList(item);
 
         return result;
+    }
+
+    protected addItemsToResult(items: KeyMultiValueList, result: KeyMultiValueList): void
+    {
+        for (const key in items)
+        {
+            items[key].forEach(v => this.addPairToResult(key, v, result));
+        }
     }
 }
 
